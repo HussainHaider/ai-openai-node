@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { Document } from 'langchain/document'
-import { MemoryVectorStore } from 'langchain/vectorstores/memory'
-import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
+import { MemoryVectorStore } from 'langchain/vectorstores/memory' // like a database, an in-memory storage for vectors (semantic representations of data), not for production
+import { OpenAIEmbeddings } from 'langchain/embeddings/openai' // use to send data and it will create embeddings for us.
 
 const movies = [
     {
@@ -53,7 +53,7 @@ const createtore = () => MemoryVectorStore.fromDocuments(
 
 const search = async (query, count=1) => {
     const store = await createtore()
-    return store.similaritySearch(query, count)
+    return store.similaritySearchWithScore(query, count)
 } 
 
 console.log(await search("a movie that willl make me fell like I'm crazy"))  

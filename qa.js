@@ -9,7 +9,7 @@ import { YoutubeLoader } from '@langchain/community/document_loaders/web/youtube
 const question = process.argv[2] || 'hi'
 const video = `https://youtu.be/zR_iuq2evXo?si=cG8rODgRgXOx9_Cn`
 
-const creatStore = (docs) => MemoryVectorStore.fromDocuments(docs, new OpenAIEmbeddings())
+const createStore = (docs) => MemoryVectorStore.fromDocuments(docs, new OpenAIEmbeddings())
 
 const docsFromYTVideo = (video) => {
     const loader = YoutubeLoader.createFromUrl(video, { language: 'en', addVideoInfo: true, })
@@ -31,7 +31,8 @@ const loadStore = async () => {
   
   const query = async () => {
     const store = await loadStore()
-    const results = await store.similaritySearch(question, 1)
+    const results = await store.similaritySearch(question, 1) // we use the question first on similaritySearch to get the matching chunks and 
+    // then use the question again in the GPT to answer the question. 
   
     const response = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo-16k-0613',
